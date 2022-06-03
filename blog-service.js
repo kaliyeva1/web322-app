@@ -4,41 +4,40 @@ const fs = require("fs");
 
 var posts = [];
 var categories = [];
+const res = require('express/lib/response');
+
+const { resolve } = require('path');
+var exports = module.exports = {};
 
 //------------------------------------------------------------------------------------------
 // FUNCTION INITIALIZE
 // loads JSON data into global arrays
 //------------------------------------------------------------------------------------------
-module.exports.initialize = function () {
 
+module.exports.initialize = () => {
     var promise = new Promise((resolve, reject) => {
-       
-        try {
-
-            fs.readFile('./data/posts.json', (err, data) => {
-                if (err) throw err;
-
-                posts = JSON.parse(data);
-                console.log("INITIALIZE - load posts.");
-            })
-
-            fs.readFile('./data/categories.json', (err, data) => {
-                if (err) throw err;
-
-                departments = JSON.parse(data);
-                console.log("INITIALIZE - load categories.");
-            })
-
-        } catch (ex) {
-                      console.log("INITIALIZE - FAILURE.");
-                      reject("INITIALIZE - FAILURE.");
-                     }
-        console.log("INITIALIZE - SUCCESS.");
-        resolve("INITIALIZE - SUCCESS.");
-    })
-
+    try
+    {
+    fs.readFile('./data/categories.json', (error, data) => {
+    if (error) throw error;
+   
+    categories = JSON.parse(data);
+    resolve("Successful");
+    });
+    fs.readFile('./data/posts.json', (error, data) => {
+    if (error) throw error;
+    posts = JSON.parse(data);
+    resolve("Successful");
+   
+    });
+    }
+    catch(error){
+    reject('Unable to open file');
+    }
+    });
     return promise;
-};
+   }
+   
 
 //------------------------------------------------------------------------------------------
 // FUNCTION GETALLEMPLOYEES
@@ -69,13 +68,13 @@ module.exports.getPublishedPosts = function () {
     var promise = new Promise((resolve, reject) => {
       
        for (var i=0; i < posts.length; i++){
-           if (posts[i].isManager == true) {
+           if (posts[i].isPosts == true) {
            published.push(posts[i]);
            }
        }
 
        if(published.length === 0) {
-        var err = "getManagers() does not have any data.";
+        var err = "getPublishedPosts() does not have any data.";
         reject({message: err});
        }  
 

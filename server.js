@@ -15,6 +15,8 @@ var express = require("express");
 var path = require("path");
 var dataSrv = require("./blog-service.js");
 
+
+
 var app = express();
 app.use(express.static('public/css')); //to recognize the css files
 app.use(express.static('img')); 
@@ -56,7 +58,7 @@ app.get("/about", function(req,res){
   //------------------------------------------------------------------
   //------------------------------------------------------------------
   app.get("/published", function(req,res){
-    dataSrv.getManagers()
+    dataSrv.getPublishedPosts()
                              .then((data) => {
                                console.log ("getPublishedPosts JSON.");
                                res.json(data);
